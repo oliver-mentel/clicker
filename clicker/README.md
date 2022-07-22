@@ -2,7 +2,7 @@
 
 Quick clicker game app developed with VueJs for practice purposes. 
 
-![image](https://user-images.githubusercontent.com/54673382/180433810-8829c531-bbf1-4a51-825a-3ab99616032b.png)
+![image](https://user-images.githubusercontent.com/54673382/180434811-c83eb59c-26a3-47d1-a692-c9abbfbff514.png)
 
 
 ## Recommended IDE Setup
