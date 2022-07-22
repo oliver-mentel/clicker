@@ -1,6 +1,6 @@
 # clicker
 
-This template should help get you started developing with Vue 3 in Vite.
+Quick clicker game app developed with VueJs for practice purposes. 
 
 ## Recommended IDE Setup
 
