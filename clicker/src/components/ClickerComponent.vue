@@ -1,61 +1,66 @@
 <template>
-  <!-- Header -->
-  <h1 class="header">CLICKER</h1>
-
   <!-- Countdown Timer -->
-  <div class="countdown-container">
-    <div class="timer-container">
-      <p class="time-font">{{ isTimerReseted ? 10 : countDown }}s</p>
+  <div class="item-container">
+    <div class="countdown-container">
+      <div class="timer-container">
+        <p class="time-font">{{ isTimerReseted ? 10 : countDown }}s</p>
+      </div>
     </div>
-  </div>
-  <h3 v-if="isBestScore && displayInfo" class="high-score-text">
-    !!! NEW HIGH SCORE !!!
-  </h3>
-  <!-- Click sum text -->
-  <h4 style="margin-bottom: 10px">You clicked {{ clicks }} times.</h4>
-  <br />
+    <h3 v-if="isBestScore && displayInfo" class="high-score-text">
+      !!! NEW HIGH SCORE !!!
+    </h3>
+    <!-- Click sum text -->
+    <h4 style="margin-bottom: 10px">You clicked {{ clicks }} times.</h4>
+    <br />
 
-  <!-- Click Button -->
-  <button
-    :disabled="countDown <= 0 && countDown === 10"
-    @click="clickIterator()"
-    class="button"
-  >
-    Click
-  </button>
-  <br />
+    <!-- Click Button -->
+    <button
+      :disabled="countDown <= 0 && countDown === 10"
+      @click="clickIterator()"
+      class="button"
+    >
+      Click
+    </button>
+    <br />
 
-  <!-- Info -->
-  <div class="info-container">
-    <h4 v-if="displayInfo && !isBestScore" class="good-effort-text">
-      {{ getRank + 1 === (2 || 3) ? "Not Bad!" : "" }}
-      <br />
-      You made #{{ getRank + 1 }} position!
-      <br />
-      Better luck next time...
-    </h4>
-    <!-- Click/ Time Ratio -->
-    <h4 v-if="displayInfo" class="ratio-text">
-      Your click over time ratio: {{ clicks / 10 }} clicks / s
-    </h4>
-  </div>
-  <!-- Reset Button -->
-  <button @click="resetAllValues()">Reset</button>
+    <!-- Info -->
+    <div class="info-container">
+      <h4 v-if="displayInfo && !isBestScore" class="good-effort-text">
+        {{ getRank + 1 === (2 || 3) ? "Not Bad!" : "" }}
+        {{ userName }}!
+        <br />
+        You made #{{ getRank + 1 }} position!
+        <br />
+        Better luck next time...
+      </h4>
+      <!-- Click/ Time Ratio -->
+      <h4 v-if="displayInfo" class="ratio-text">
+        Your click over time ratio: {{ clicks / 10 }} clicks / s
+      </h4>
+    </div>
+    <!-- Reset Button -->
+    <button @click="resetAllValues()">Reset</button>
 
-  <!-- Top Scorte Heading & List -->
-  <div class="top-score-container">
-    <h2 class="top-score-title">
-      Top {{ orderedHighScores.length === 9 ? "10" : "" }} Scores
-    </h2>
-    <ol class="list">
-      <li
-        v-for="(scores, index) in orderedHighScores"
-        :class="colorRankByIndex(index)"
-      >
-        {{ scores }}
-      </li>
-      <p v-if="orderedHighScores.length === 0">No Scores to Display</p>
-    </ol>
+    <!-- Top Scorte Heading & List -->
+    <div class="top-score-container">
+      <h2 class="top-score-title">
+        Top {{ orderedHighScoresAndUsers.length === 9 ? "10" : "" }} Scores
+      </h2>
+      <ol class="list">
+        <li
+          v-for="(user, index) in orderedHighScoresAndUsers"
+          :class="colorRankByIndex(index)"
+        >
+          <div class="score-item">
+            <div>{{ user.score }}</div>
+            <div>{{ user.name }}</div>
+          </div>
+        </li>
+        <p v-if="orderedHighScoresAndUsers.length === 0">
+          No Scores to Display
+        </p>
+      </ol>
+    </div>
   </div>
 </template>
 
@@ -64,6 +69,7 @@ export default {
   name: "ClickerComponent",
   props: {
     msg: String,
+    userName: String,
   },
   data() {
     return {
@@ -75,12 +81,20 @@ export default {
       displayInfo: false,
       isBestScore: false,
       isTimerReseted: false,
-      orderedHighScores: [],
+      orderedHighScoresAndUsers: [
+        // {
+        //   score: 10,
+        //   name: this.userName,
+        // },
+      ],
     };
   },
   computed: {
     getRank() {
-      return this.orderedHighScores.indexOf(this.clicks);
+      return this.orderedHighScoresAndUsers.findIndex(
+        (user) => user.score === this.clicks
+      );
+      //   return this.orderedHighScoresAndUsers.indexOf(this.clicks);
     },
   },
 
@@ -88,7 +102,6 @@ export default {
     colorRankByIndex(index) {
       if (index === 0) {
         return "gold";
-        // return 'color: #ffd700; font-size: 35px; margin: 10px';
       } else if (index === 1) {
         return "silver";
       } else if (index === 2) {
@@ -98,11 +111,12 @@ export default {
       }
     },
     reduceArrayLength() {
-      return this.orderedHighScores.slice(0, 9);
+      return this.orderedHighScoresAndUsers.slice(0, 9);
     },
     orderedTopScores() {
-      return this.orderedHighScores.sort(function (a, b) {
-        return b - a;
+      // order high scores from orderedHighScoresAndUsers by descending order
+      this.orderedHighScoresAndUsers.sort((a, b) => {
+        return b.score - a.score;
       });
     },
     clickIterator() {
@@ -143,23 +157,25 @@ export default {
 
     appendTopScoreList() {
       if (this.countDown === 0) {
-        this.orderedHighScores.push(this.clicks);
-
+        this.orderedHighScoresAndUsers.push({
+          name: this.userName,
+          score: this.clicks,
+        });
         if (
-          this.orderedHighScores[0] < this.clicks ||
-          this.orderedHighScores.length === 1
+          this.orderedHighScoresAndUsers[0].score < this.clicks ||
+          this.orderedHighScoresAndUsers.length === 0
         ) {
           this.isBestScore = true;
         }
+        // wait 3 seconds before prompting user to enter name
+
+        console.log(this.orderedHighScoresAndUsers[0].score);
         this.orderedTopScores();
-        if (this.orderedHighScores.length >= 9) {
-          this.orderedHighScores.length = 10;
+        if (this.orderedHighScoresAndUsers.length >= 9) {
+          this.orderedHighScoresAndUsers.length = 10;
         }
       }
     },
-  },
-  created() {
-    // this.colorRank();
   },
 };
 </script>
@@ -167,6 +183,15 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 /* Ranking colors for High Score list */
+.item-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  align-content: center;
+}
+
 .gold {
   color: #ffd700;
   font-size: 35px;
@@ -203,18 +228,18 @@ export default {
   font-family: "Roboto", sans-serif;
   font-weight: bold;
 }
-.header {
-  font-family: "Roboto", sans-serif;
-  font-weight: 200 !important;
-  letter-spacing: -5px;
-  font-size: 40px;
-  margin-bottom: 50px;
+.score-item {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
+
 button,
 .button {
   position: relative;
   padding: 10px 30px;
   margin: 30px;
+  width: fit-content;
   border: 0px solid grey;
   border-radius: 20px;
   background-color: #fbab7e;
@@ -249,6 +274,13 @@ h4 {
   -webkit-animation: color-change 1s infinite;
   font-size: 30px;
   font-size: 5.5vw;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+  supported by Chrome, Edge, Opera and Firefox */
 }
 @keyframes color-change {
   0% {
@@ -278,7 +310,7 @@ h4 {
   width: fit-content;
   margin: 0 auto;
   padding: 10px 20px;
-  color: linear-gradient(180deg, #ff9a8b 0%, #ff6a88 55%, #ff99ac 100%);
+  /* color: linear-gradient(180deg, #ff9a8b 0%, #ff6a88 55%, #ff99ac 100%); */
   font-size: 72px;
   border-radius: 20px;
 }
@@ -316,7 +348,7 @@ h4 {
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  max-width: 500px;
+  min-width: 500px;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.1),

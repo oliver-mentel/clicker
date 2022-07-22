@@ -1,95 +1,120 @@
 <template>
-  <div id="app">
-    <ClickerComponent msg="Welcome to Your Vue.js App" />
-    <FooterComponent />
+  <div id="wrapper">
+    <header>
+      <HeaderComponent />
+    </header>
+    <div id="app">
+      <UserNameComponent
+        v-on:submitUsername="userNameReceived"
+        v-if="!userName"
+      />
+      <div v-else>
+        <ClickerComponent :userName="userName" />
+      </div>
+    </div>
   </div>
+  <footer>
+    <FooterComponent />
+  </footer>
 </template>
 
 <script>
 import ClickerComponent from "./components/ClickerComponent.vue";
 import FooterComponent from "./components/FooterComponent.vue";
+import UserNameComponent from "./components/UserNameComponent.vue";
+import HeaderComponent from "./components/HeaderComponent.vue";
 
 export default {
   name: "App",
   components: {
     ClickerComponent,
     FooterComponent,
+    UserNameComponent,
+    HeaderComponent,
+  },
+  props: {
+    userName: String,
+  },
+  data() {
+    return {
+      userName: "",
+    };
+  },
+
+  methods: {
+    userNameReceived(userName) {
+      this.userName = userName;
+    },
   },
 };
 </script>
 
 <style>
-html {
-  height: auto;
+html,
+body {
+  height: 100%;
   width: 100%;
-  background: #db6b6b;
-  background: rgb(51, 120, 255);
-  background: linear-gradient(
+  margin: 0;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+}
+html,
+body {
+  margin: 0;
+  /* background: linear-gradient(
+    135deg,
+    rgba(51, 120, 255, 1) 0%,
+    rgba(148, 66, 254, 1) 100%
+  ); */
+  background-color: rgb(118, 51, 212);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+}
+
+/* place footer always at the bottom with dynamic content */
+footer {
+  /* position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  margin-top: 40px; */
+
+  width: 100%;
+  margin-top: 50px;
+  height: 100px;
+  position: relative;
+  clear: both;
+}
+
+*/ #wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* place all elements evenly  */
+  justify-content: space-evenly;
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+}
+#app {
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #eee;
+  height: auto;
+  width: auto;
+  /* background: linear-gradient(
     135deg,
     rgba(51, 120, 255, 1) 0%,
     rgba(148, 66, 254, 1) 100%
   );
-  /* margin-bottom: 10px; */
-}
-body {
-  margin-bottom: 0px;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  /* margin: 0 auto; */
-  /* margin-bottom: 40px; */
-  color: #eee;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; */
 }
 </style>
-
-<!-- <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
-<template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
-</template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style> -->
