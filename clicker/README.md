@@ -1,6 +1,6 @@
-## clicker
+# CLICKER
 
-Quick clicker game app developed with VueJs for practice purposes. 
+Quick clicker game app developed with VueJs Framework for practice purposes. 
 
 ![image](https://user-images.githubusercontent.com/54673382/180434811-c83eb59c-26a3-47d1-a692-c9abbfbff514.png)
 
