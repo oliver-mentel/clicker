@@ -8,9 +8,17 @@
           name="username"
           v-model="username"
           placeholder="Enter Your Name"
+          maxlength="20"
           required
         />
-        <button @click="submitUsername()" type="submit">Submit</button>
+        <button
+          @click="submitUsername()"
+          type="submit"
+          :disabled="isDisabled"
+          class="submit-btn"
+        >
+          Submit
+        </button>
       </form>
     </div>
   </div>
@@ -20,6 +28,16 @@ export default {
   name: "UserNameComponent",
   props: {
     userName: String,
+  },
+  data() {
+    return {
+      username: "",
+    };
+  },
+  computed: {
+    isDisabled() {
+      return this.username.length === 0;
+    },
   },
   methods: {
     submitUsername() {
@@ -31,12 +49,9 @@ export default {
 <style scoped>
 /* Place form field in center of page */
 .username-form-container {
-  /* position: absolute;
-  width: auto;
-  height: auto; */
-  /* top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .items {
@@ -49,7 +64,7 @@ form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 500px;
+  min-width: 330px;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.1),
@@ -70,6 +85,7 @@ input {
   font-size: 1.2rem;
   font-weight: bold;
   color: #fff;
+  text-align: center;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.1),

@@ -17,7 +17,7 @@
     <button
       :disabled="countDown <= 0 && countDown === 10"
       @click="clickIterator()"
-      class="button"
+      class="click-btn"
     >
       Click
     </button>
@@ -39,7 +39,13 @@
       </h4>
     </div>
     <!-- Reset Button -->
-    <button @click="resetAllValues()">Reset</button>
+    <button
+      @click="resetAllValues()"
+      :disabled="!timerEnabled"
+      class="reset-btn"
+    >
+      Reset
+    </button>
 
     <!-- Top Scorte Heading & List -->
     <div class="top-score-container">
@@ -81,12 +87,7 @@ export default {
       displayInfo: false,
       isBestScore: false,
       isTimerReseted: false,
-      orderedHighScoresAndUsers: [
-        // {
-        //   score: 10,
-        //   name: this.userName,
-        // },
-      ],
+      orderedHighScoresAndUsers: [],
     };
   },
   computed: {
@@ -157,25 +158,51 @@ export default {
 
     appendTopScoreList() {
       if (this.countDown === 0) {
+        // save user's score to local storage
+        this.saveUserScore();
+
         this.orderedHighScoresAndUsers.push({
           name: this.userName,
           score: this.clicks,
         });
         if (
           this.orderedHighScoresAndUsers[0].score < this.clicks ||
-          this.orderedHighScoresAndUsers.length === 0
+          this.orderedHighScoresAndUsers.length === 1
         ) {
           this.isBestScore = true;
         }
-        // wait 3 seconds before prompting user to enter name
-
-        console.log(this.orderedHighScoresAndUsers[0].score);
         this.orderedTopScores();
         if (this.orderedHighScoresAndUsers.length >= 9) {
           this.orderedHighScoresAndUsers.length = 10;
         }
       }
     },
+
+    // save user's score to local storage
+    saveUserScore() {
+      let userScores = JSON.parse(localStorage.getItem("userScores"));
+      if (userScores === null) {
+        userScores = [];
+      }
+      userScores.push({
+        name: this.userName,
+        score: this.clicks,
+      });
+      localStorage.setItem("userScores", JSON.stringify(userScores));
+    },
+
+    // get user's score from local storage
+    getUserScore() {
+      let userScores = JSON.parse(localStorage.getItem("userScores"));
+      if (userScores === null) {
+        userScores = [];
+      }
+      return userScores;
+    },
+  },
+  created() {
+    this.orderedHighScoresAndUsers = this.getUserScore();
+    this.orderedTopScores();
   },
 };
 </script>
@@ -234,35 +261,6 @@ export default {
   align-items: center;
 }
 
-button,
-.button {
-  position: relative;
-  padding: 10px 30px;
-  margin: 30px;
-  width: fit-content;
-  border: 0px solid grey;
-  border-radius: 20px;
-  background-color: #fbab7e;
-  overflow: hidden;
-  font-size: 20px;
-  color: #fff;
-  cursor: pointer;
-  transition: 0.2s all;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-  supported by Chrome, Edge, Opera and Firefox */
-}
-.button:active {
-  transform: scale(0.98);
-  /* Scaling button to 0.98 to its original size */
-  box-shadow: 0px 5px 17px 4px rgb(0 0 0 / 24%);
-  /* Lowering
- the shadow */
-}
 h5,
 h4 {
   font-weight: 200;
@@ -348,7 +346,7 @@ h4 {
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  min-width: 500px;
+  width: 35vw;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.1),
@@ -359,6 +357,19 @@ h4 {
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 32px;
 }
+
+@media screen and (max-width: 800px) {
+  .top-score-container {
+    width: 80vw;
+  }
+}
+
+@media screen and (min-width: 800px) and (max-width: 1000px) {
+  .top-score-container {
+    width: 60vw;
+  }
+}
+
 .top-score-title {
   font-family: "Roboto", sans-serif;
   font-weight: 100;
