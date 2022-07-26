@@ -64,6 +64,7 @@ html {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  touch-action: manipulation;
 }
 
 /* place footer always at the bottom with dynamic content */
