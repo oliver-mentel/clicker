@@ -5,7 +5,7 @@ import vue from "@vitejs/plugin-vue";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/Github-Repository-Project-Name/",
+  base: "/clicker/",
   plugins: [vue()],
   resolve: {
     alias: {
