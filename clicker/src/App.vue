@@ -10,8 +10,8 @@
         <ClickerComponent :userName="userName" />
       </div>
     </div>
+    <FooterComponent />
   </div>
-  <FooterComponent />
 </template>
 
 <script>
@@ -80,8 +80,8 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-  min-height: 100%;
+  justify-content: space-between;
+  height: 100%;
 }
 #app {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
@@ -89,16 +89,8 @@ footer {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #eee;
-  height: auto;
+  height: 100%;
   width: auto;
-  /* background: linear-gradient(
-    135deg,
-    rgba(51, 120, 255, 1) 0%,
-    rgba(148, 66, 254, 1) 100%
-  );
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat; */
 }
 .click-btn,
 .reset-btn,
@@ -124,8 +116,21 @@ footer {
   supported by Chrome, Edge, Opera and Firefox */
 }
 
+.click-btn {
+  font-size: 30px;
+}
+
+@media (max-width: 1100px) {
+  .click-btn {
+    width: 30vw;
+    height: 10vh;
+    padding: 0px;
+    font-size: 5vw;
+  }
+}
+
 .click-btn:active {
-  transform: scale(0.9);
+  transform: scale(0.8);
   /* Scaling button to 0.98 to its original size */
   box-shadow: 0px 5px 17px 4px rgb(0 0 0 / 24%);
   /* Lowering

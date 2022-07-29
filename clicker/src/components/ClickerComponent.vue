@@ -58,8 +58,8 @@
           :class="colorRankByIndex(index)"
         >
           <div class="score-item">
-            <div>{{ user.score }}</div>
-            <div>{{ user.name }}</div>
+            {{ user.score }}
+            {{ user.name }}
           </div>
         </li>
         <p v-if="orderedHighScoresAndUsers.length === 0">
@@ -68,6 +68,7 @@
       </ol>
     </div>
   </div>
+  <div class="clickEffect"></div>
 </template>
 
 <script>
@@ -209,6 +210,59 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+/* div.clickEffect {
+  position: fixed;
+  box-sizing: border-box;
+  border-style: solid;
+  border-color: #ffffff;
+  border-radius: 50%;
+  animation: clickEffect 0.4s ease-out;
+  z-index: 99999;
+}
+@keyframes clickEffect {
+  0% {
+    opacity: 1;
+    width: 0.5em;
+    height: 0.5em;
+    margin: -0.25em;
+    border-width: 0.5em;
+  }
+  100% {
+    opacity: 0.2;
+    width: 15em;
+    height: 15em;
+    margin: -7.5em;
+    border-width: 0.03em;
+  }
+} */
+
+.click-effect {
+  font-size: 30px;
+  /* position: fixed; */
+  box-sizing: border-box;
+  border-style: solid;
+  border-color: #ffffff;
+  /* border-radius: 50%; */
+  animation: clickEffect 0.4s ease-out;
+  z-index: 99999;
+}
+@keyframes clickEffect {
+  0% {
+    opacity: 1;
+    width: 0.5em;
+    height: 0.5em;
+    margin: -0.25em;
+    border-width: 0.5em;
+  }
+  100% {
+    opacity: 0.2;
+    width: 15em;
+    height: 15em;
+    margin: -7.5em;
+    border-width: 0.03em;
+  }
+}
+
 /* Ranking colors for High Score list */
 .item-container {
   display: flex;
@@ -221,15 +275,16 @@ export default {
 
 .gold {
   color: #ffd700;
-  font-size: 35px;
+  font-size: 1.6vw;
   margin: 30px 10px;
   border-radius: 20px;
   background-color: rgb(255 255 0 / 5%);
   box-shadow: 0px 0px 12px 10px;
 }
+
 .silver {
   color: #c0c0c0;
-  font-size: 30px;
+  font-size: 1.5vw;
   margin: 30px 15px;
   border-radius: 20px;
   background-color: rgb(255 255 0 / 5%);
@@ -237,12 +292,36 @@ export default {
 }
 .bronze {
   color: #cd7f32;
-  font-size: 25px;
+  font-size: 1.4vw;
   margin: 30px 20px;
   border-radius: 20px;
   background-color: rgb(255 255 0 / 5%);
   box-shadow: 0px 0px 12px 4px;
 }
+
+@media screen and (max-width: 800px) {
+  .gold {
+    font-size: 3.5vw;
+  }
+  .silver {
+    font-size: 3.5vw;
+  }
+  .bronze {
+    font-size: 3.5vw;
+  }
+}
+@media screen and (min-width: 800px) and (max-width: 1200px) {
+  .gold {
+    font-size: 2.5vw;
+  }
+  .silver {
+    font-size: 2.5vw;
+  }
+  .bronze {
+    font-size: 2.5vw;
+  }
+}
+
 .ranking-numbers {
   margin: 10px 10px;
 }
@@ -259,6 +338,7 @@ export default {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  padding: 0px 10px;
 }
 
 h5,
@@ -364,11 +444,17 @@ h4 {
   }
 }
 
-@media screen and (min-width: 800px) and (max-width: 1000px) {
+@media screen and (min-width: 800px) and (max-width: 1200px) {
   .top-score-container {
     width: 60vw;
   }
 }
+
+/* @media screen and (min-width: 100px) and (max-width: 1000px) {
+  .top-score-container {
+    width: 60vw;
+  }
+} */
 
 .top-score-title {
   font-family: "Roboto", sans-serif;

@@ -10,7 +10,12 @@
           placeholder="Enter Your Name"
           maxlength="20"
           required
+          :style="isCharacterLimit"
         />
+        <!-- Span element which displays when max character length is met -->
+        <span v-if="username.length >= 20" class="max-length-warning"
+          >Maximum character length is 20</span
+        >
         <button
           @click="submitUsername()"
           type="submit"
@@ -37,6 +42,11 @@ export default {
   computed: {
     isDisabled() {
       return this.username.length === 0;
+    },
+    isCharacterLimit() {
+      if (this.username.length >= 20) {
+        return "border: 1px solid red; box-shadow: 0px 0px 5px 3px #ff000070; outline: none;";
+      }
     },
   },
   methods: {
@@ -75,6 +85,11 @@ form {
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 32px;
 }
+.max-length-warning {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
 input {
   width: 200px;
   height: 40px;
@@ -94,6 +109,7 @@ input {
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
+
 button {
   position: relative;
   padding: 10px 30px;
